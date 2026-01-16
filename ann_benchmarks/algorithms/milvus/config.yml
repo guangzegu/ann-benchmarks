@@ -67,3 +67,15 @@ float:
           args:
             nlist: [64, 128, 256, 512, 1024, 2048, 4096, 8192]
           query_args: [[1, 10, 20, 30, 50]]
+    - base_args: ["@metric", "@dimension"]
+      constructor: MilvusDISKANN
+      disabled: false
+      docker_tag: ann-benchmarks-milvus
+      module: ann_benchmarks.algorithms.milvus
+      name: milvus-diskann
+      run_groups:
+        DISKANN:
+          args:
+            build_dram_budget_gb: [4, 8, 16]
+            pq_code_budget_gb: [2, 4]
+          query_args: [[10, 20, 40, 80, 120, 200]]
