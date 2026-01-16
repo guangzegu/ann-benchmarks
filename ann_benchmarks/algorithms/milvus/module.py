@@ -279,3 +279,31 @@ class MilvusSCANN(Milvus):
             "params": {"nprobe": nprobe}
         }
         self.name = f"MilvusSCANN metric:{self._metric}, index_nlist:{self._index_nlist}, search_nprobe:{nprobe}"
+
+
+class MilvusDISKANN(Milvus):
+    def __init__(self, metric, dim, index_param):
+        super().__init__(metric, dim, index_param)
+        self._build_dram_budget_gb = index_param.get("build_dram_budget_gb", 8)
+        self._pq_code_budget_gb = index_param.get("pq_code_budget_gb", 0)
+        self._index_search_list = index_param.get("search_list", 100)
+
+    def get_index_param(self):
+        return {
+            "index_type": "DISKANN",
+            "metric_type": self._metric_type,
+            "params": {
+                "build_dram_budget_gb": self._build_dram_budget_gb,
+                "pq_code_budget_gb": self._pq_code_budget_gb
+            }
+        }
+
+    def set_query_arguments(self, search_list):
+        self.search_params = {
+            "metric_type": self._metric_type,
+            "params": {
+                "search_list": search_list
+            }
+        }
+        self.name = f"MilvusDISKANN metric:{self._metric}, build_dram_budget:{self._build_dram_budget_gb}GB, pq_code_budget:{self._pq_code_budget_gb}GB, search_list:{search_list}"
+
