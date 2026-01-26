@@ -76,6 +76,9 @@ float:
       run_groups:
         DISKANN:
           args:
-            build_dram_budget_gb: [4, 8, 16]
-            pq_code_budget_gb: [2, 4]
-          query_args: [[10, 20, 40, 80, 120, 200]]
+            max_degree: [48]
+            beamwidth: [20]
+            build_dram_budget_gb: [10]
+            pq_code_budget_gb: [6]
+            search_list_size: [200]
+          query_args: [[20]]
