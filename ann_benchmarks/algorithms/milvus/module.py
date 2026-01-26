@@ -282,10 +282,13 @@ class MilvusSCANN(Milvus):
 
 
 class MilvusDISKANN(Milvus):
-    def __init__(self, metric, dim, index_param):
+   def __init__(self, metric, dim, index_param):
         super().__init__(metric, dim, index_param)
-        self._build_dram_budget_gb = index_param.get("build_dram_budget_gb", 8)
-        self._pq_code_budget_gb = index_param.get("pq_code_budget_gb", 0)
+        self._index_max_degree = index_param.get("max_degree", 56)
+        self._index_beamwidth = index_param.get("beamwidth", 10)
+        self._index_build_dram_budget_gb = index_param.get("build_dram_budget_gb", 4)
+        self._index_pq_code_budget_gb = index_param.get("pq_code_budget_gb", 8)
+        self._index_search_list_size = index_param.get("search_list_size", 100)
         self._index_search_list = index_param.get("search_list", 100)
 
     def get_index_param(self):
@@ -293,8 +296,11 @@ class MilvusDISKANN(Milvus):
             "index_type": "DISKANN",
             "metric_type": self._metric_type,
             "params": {
-                "build_dram_budget_gb": self._build_dram_budget_gb,
-                "pq_code_budget_gb": self._pq_code_budget_gb
+                "max_degree": self._index_max_degree,
+                "beamwidth": self._index_beamwidth,
+                "build_dram_budget_gb": self._index_build_dram_budget_gb,
+                "pq_code_budget_gb": self._index_pq_code_budget_gb,
+                "search_list_size": self._index_search_list_size
             }
         }
 
@@ -305,5 +311,4 @@ class MilvusDISKANN(Milvus):
                 "search_list": search_list
             }
         }
-        self.name = f"MilvusDISKANN metric:{self._metric}, build_dram_budget:{self._build_dram_budget_gb}GB, pq_code_budget:{self._pq_code_budget_gb}GB, search_list:{search_list}"
-
+        self.name = f"MilvusDISKANN metric:{self._metric}, max_degree:{self._index_max_degree}, beamwidth:{self._index_beamwidth}, build_dram_budget:{self._index_build_dram_budget_gb}GB, pq_code_budget:{self._index_pq_code_budget_gb}GB, search_list_siz:{self._index_search_list_size}, search_list:{search_list}
